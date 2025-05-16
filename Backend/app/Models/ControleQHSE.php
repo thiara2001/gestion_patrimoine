@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class ControleQHSE extends Model
 {
     /** @use HasFactory<\Database\Factories\ControleQHSEFactory> */
+
     use HasFactory;
-    protected $fillable = [
-        'localisation',
-        'observation',
-        'conclusion',
+
+     protected $fillable = [
+        'id_utilisateur',
     ];
+   
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisteur');
+    }
+   
 }

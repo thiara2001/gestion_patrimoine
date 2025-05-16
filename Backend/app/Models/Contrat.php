@@ -9,7 +9,6 @@ class Contrat extends Model
 {
     /** @use HasFactory<\Database\Factories\ContratFactory> */
     use HasFactory;
-
     
     protected $fillable = [
         'id_utilisateur',
@@ -24,5 +23,12 @@ class Contrat extends Model
 
     public function utilisateur(){
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+    }
+
+
+     public function paiement()
+    {
+        return $this->belongsTo(Paiement::class, 'id_paiement');
+
     }
 }

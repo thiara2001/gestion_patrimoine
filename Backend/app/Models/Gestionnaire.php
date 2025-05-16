@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Gestionnaire extends Utilisateur
 {
-    /** @use HasFactory<\Database\Factories\GestionnaireFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -23,8 +21,10 @@ class Gestionnaire extends Utilisateur
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
 
-    public function batiment(){
-        return $this->hasMany(Batiment::class, 'id_utilisateur');
+    public function site(){
+        return $this->hasMany(site::class, 'id_utilisateur');
     }
 
 }
+
+

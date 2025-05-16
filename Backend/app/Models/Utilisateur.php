@@ -93,4 +93,26 @@ abstract class Utilisateur extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function technicien(){
+        return $this->hasMany(Technicien::class, 'id_utilisateur');
+    }
+
+    public function gestionnaire(){
+        return $this->hasMany(Gestionnaire::class, 'id_utilisateur');
+    }
+
+    public function etudiant(){
+        return $this->hasMany(Etudiant::class, 'id_utilisateur');
+    }
+
+    public function agentQHSE(){
+        return $this->hasMany(AgentQHSE::class, 'id_utilisateur');
+    }
+
+    public function commercant(){
+        return $this->hasMany(Commercant::class, 'id_utilisateur');
+    }
+
+    
 }

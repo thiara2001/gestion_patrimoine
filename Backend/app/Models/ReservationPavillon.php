@@ -9,4 +9,27 @@ class ReservationPavillon extends Model
 {
     /** @use HasFactory<\Database\Factories\ReservationPavillonFactory> */
     use HasFactory;
+     protected $fillable = [
+        'id_utilisateur',
+        'id_site',
+        'niveauEtude',
+        'nomPavillon',
+        'nomChambre',
+        'nombreCredit',
+        'moyenneAnnuel',
+        'document'
+    ];
+    public function affectation()
+    {
+        return $this->hasMany(Affectation::class);
+    }
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisteur');
+    }
+     public function site()
+    {
+        return $this->belongsTo(Site::class, 'id_site');
+    }
+
 }

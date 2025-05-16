@@ -17,9 +17,11 @@ class Rapport extends Model
         'dateGeneration'
     ];
 
-    public function getUserType(){
-        return 'Rapport';
+    
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisteur');
     }
+    
 
-   
 }
