@@ -10,10 +10,12 @@ class Alerte extends Model
     /** @use HasFactory<\Database\Factories\AlerteFactory> */
     use HasFactory;
      protected $fillable = [
+        'id_utilisaeur',
         'nom',
         'description',
         'typeAlerte',
         'destinataire'
+        
     ];
     public function utilisateur()
     {

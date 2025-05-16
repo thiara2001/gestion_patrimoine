@@ -10,6 +10,7 @@ class Pavillon extends Model
     /** @use HasFactory<\Database\Factories\PavillonFactory> */
     use HasFactory;
     protected $fillable = [
+        'id_site',
         'nomPavillon',
         'nombreChambre',
         'nombreSalle',

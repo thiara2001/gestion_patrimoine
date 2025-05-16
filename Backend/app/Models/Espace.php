@@ -10,6 +10,7 @@ class Espace extends Model
     /** @use HasFactory<\Database\Factories\EspaceFactory> */
     use HasFactory;
      protected $fillable = [
+        'id_site',
         'localisation',
         'superficie',
     ];
