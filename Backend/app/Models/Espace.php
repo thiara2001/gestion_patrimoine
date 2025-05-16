@@ -9,4 +9,12 @@ class Espace extends Model
 {
     /** @use HasFactory<\Database\Factories\EspaceFactory> */
     use HasFactory;
+     protected $fillable = [
+        'localisation',
+        'superficie',
+    ];
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'id_site');
+    }
 }

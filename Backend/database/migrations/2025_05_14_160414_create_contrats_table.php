@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreign('id_paiement')->references('id')->on('paiements')->onDelete('cascade');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->date('caution');
             $table->double('montant_loyer');
             $table->double('montant_caution');
         

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('id_reservationCantine')->references('id')->on('reservation_cantine')->onDelete('cascade');
             $table->unsignedBigInteger('id_reservationPavillon'); // Ajout de la colonne
             $table->foreign('id_reservationPavillon')->references('id')->on('reservation_pavillon')->onDelete('cascade');
+            $table->date('date_affectation');
             $table->timestamps();
         });
     }

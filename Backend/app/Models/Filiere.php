@@ -9,4 +9,11 @@ class Filiere extends Model
 {
     /** @use HasFactory<\Database\Factories\FiliereFactory> */
     use HasFactory;
+     protected $fillable = [
+        'nomFiliere'
+    ];
+    public function etudiant()
+    {
+        return $this->hasMany(Etudiant::class);
+    }
 }

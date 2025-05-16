@@ -16,10 +16,12 @@ return new class extends Migration
             $table->String('nom');
             $table->String('prenom');
             $table->String('email')->unique();
+             $table->string('password');
             $table->String('sexe');
             $table->integer('age');
             $table->String('adresse');
             $table->String('telephone');
+            $table->String('type');
             $table->enum('role', ['Gestionnaire','Technicien','AgentQHSE','Commercant','Etudiant']);
             $table->timestamps();
         });

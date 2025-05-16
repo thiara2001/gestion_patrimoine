@@ -9,4 +9,8 @@ class Etudiant extends Model
 {
     /** @use HasFactory<\Database\Factories\EtudiantFactory> */
     use HasFactory;
+    public function filiere()
+    {
+        return $this->belongsTo(Etudiant::class, 'id_filiere');
+    }
 }
