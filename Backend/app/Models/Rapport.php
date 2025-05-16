@@ -9,4 +9,17 @@ class Rapport extends Model
 {
     /** @use HasFactory<\Database\Factories\RapportFactory> */
     use HasFactory;
+    
+    protected $fillable = [
+        'id_utilisateur',
+        'typeRapport',
+        'contenue',
+        'dateGeneration'
+    ];
+
+    public function getUserType(){
+        return 'Rapport';
+    }
+
+   
 }

@@ -9,4 +9,9 @@ class ControleQHSE extends Model
 {
     /** @use HasFactory<\Database\Factories\ControleQHSEFactory> */
     use HasFactory;
+    protected $fillable = [
+        'localisation',
+        'observation',
+        'conclusion',
+    ];
 }
