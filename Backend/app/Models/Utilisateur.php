@@ -35,42 +35,6 @@ abstract class Utilisateur extends Authenticatable
 
     abstract public function getUserType();
 
-    //Connexion des utilisateurs
-    public function login($email, $password){
-        if($this->email === $email && $this->verifierPassword($password)){
-            //Connexion dans la base de donne
-            $this->est_connecter = true;
-            $this->dernierConnexion = now();
-            $this->save();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Deconnexion des utilisateurs
-     * 
-     * @return bool
-     */
-    public function logout(){
-        $this->est_connecter = false;
-        $this->save();
-
-        return true;
-    }
-
-    /**
-     * Verifier mot de passe
-     * 
-     * @param string $password
-     * @return bool
-     */
-    public function verifierPassword($password){
-        return password_verify($password, $this->password);
-    }
-
     /**
      * The attributes that should be hidden for serialization.
      *
