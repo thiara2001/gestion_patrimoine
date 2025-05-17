@@ -2,65 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Alerte;
-use App\Http\Requests\StoreAlerteRequest;
-use App\Http\Requests\UpdateAlerteRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AlerteEnvoyeeMail;
 
 class AlerteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // 🔍 Lister toutes les alertes
     public function index()
     {
-        //
+        return response()->json(Alerte::all());
+    }
+     // 📝 Créer une nouvelle alerte
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'id_utilisaeur' => 'required|integer|exists:utilisateurs,id', // à adapter si le nom exact de la table diffère
+             'nom' => 'required|string',
+              'description' => 'required|string',
+            'typeAlerte' => 'required|string',
+            'destinataire' => 'required|string',
+           
+        ]);
+
+        $alerte = Alerte::create($validated);
+        return response()->json($alerte, 201);
+    }
+    // 📩 envoyer une alerte (création)
+    public function envoyerAlerte(Request $request)
+    {
+       $details = [
+        'id_utilisaeur' => $request->id_utilisaeur,
+        'nom' => $request->nom,
+        'description' => $request->description,
+        'typeAlerte' => $request->typeAlerte,
+        'destinataire' => $request->destinataire,
+    ];
+
+    Mail::to($request->email)->send(new AlerteEnvoyeeMail($details));
+
+    return response()->json(['message' => 'Email envoyé avec succès']);
+}
+    
+
+    // 👁️ afficher toutes les alertes
+    public function afficherAlerte()
+    {
+        $alertes = Alerte::all();
+
+        return response()->json([
+            'message' => 'Liste des alertes',
+            'data' => $alertes
+        ]);
+    }
+     // ✏️ Mettre à jour une alerte
+    public function update(Request $request, $id)
+    {
+        $alerte = Alerte::find($id);
+        if (!$alerte) {
+            return response()->json(['message' => 'Alerte non trouvée'], 404);
+        }
+
+        $alerte->update($request->only(['typeAlerte', 'description', 'idBatiment']));
+        return response()->json($alerte);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // 🗑️ Supprimer une alerte
+    public function destroy($id)
     {
-        //
-    }
+        $alerte = Alerte::find($id);
+        if (!$alerte) {
+            return response()->json(['message' => 'Alerte non trouvée'], 404);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAlerteRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Alerte $alerte)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Alerte $alerte)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAlerteRequest $request, Alerte $alerte)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Alerte $alerte)
-    {
-        //
+        $alerte->delete();
+        return response()->json(['message' => 'Alerte supprimée avec succès']);
     }
 }

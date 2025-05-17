@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgentQHSE;
+use App\Models\Reclamation;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreAgentQHSERequest;
 use App\Http\Requests\UpdateAgentQHSERequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReclamationRepondue;
 
 class AgentQHSEController extends Controller
 {
@@ -63,4 +67,20 @@ class AgentQHSEController extends Controller
     {
         //
     }
+    public function repondre($id, Request $request)
+{
+    $request->validate([
+        'resultat' => 'required|in:favorable,defavorable'
+    ]);
+
+    $reclamation = Reclamation::findOrFail($id);
+    $reclamation->resultat = $request->resultat;
+    $reclamation->save();
+
+    // Envoyer la réponse à l’étudiant (par mail ou messagerie interne)
+    Mail::to($reclamation->utilisateur->email)->send(new ReclamationRepondue($reclamation));
+
+    return response()->json(['message' => 'Réponse envoyée.']);
+}
+
 }

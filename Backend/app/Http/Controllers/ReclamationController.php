@@ -2,65 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Reclamation;
-use App\Http\Requests\StoreReclamationRequest;
-use App\Http\Requests\UpdateReclamationRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReclamationEnvoyee;
 
 class ReclamationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function store(Request $request)
+{
+    $data = $request->validate([
+        'idUtilisateur' => 'required|exists:utilisateurs,id',
+        'etablissement' => 'required|string',
+        'nomLocal' => 'required|string',
+        'description' => 'required|string'
+    ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    $reclamation = Reclamation::create($data);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreReclamationRequest $request)
-    {
-        //
-    }
+    // envoyer mail au gestionnaire
+    Mail::to('gestionnaire@crous.fr')->send(new ReclamationEnvoyee($reclamation));
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Reclamation $reclamation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Reclamation $reclamation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateReclamationRequest $request, Reclamation $reclamation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Reclamation $reclamation)
-    {
-        //
-    }
+    return response()->json(['message' => 'Réclamation envoyée avec succès.'], 201);
+}
 }

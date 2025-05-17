@@ -25,6 +25,6 @@ class Etudiant extends Model
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
      public function filiere(){
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+        return $this->belongsTo(Utilisateur::class, 'id_filiere');
     }
 }
