@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
             $table->String('description');
             $table->String('localisation');
+            $table->enum('resultat', ['en_attente', 'favorable', 'defavorable'])->default('en_attente');
             $table->timestamps();
         });
     }

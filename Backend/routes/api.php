@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\InterventionController;
-use App\Http\Controllers\API\TechnicienController;
-use App\Http\Controllers\API\EquipementController;
-use App\Http\Controllers\API\AlerteController;
-use App\Http\Controllers\API\ContratController;
-use App\Http\Controllers\API\GestionnaireController;
+use App\Http\Controllers\TechnicienController;
+use App\Http\Controllers\EquipementController;
+use App\Http\Controllers\AlerteController;
+use App\Http\Controllers\ContratController;
+use App\Http\Controllers\GestionnaireController;
 
 /*
 |--------------------------------------------------------------------------

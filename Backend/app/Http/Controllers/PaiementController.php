@@ -3,64 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Paiement;
-use App\Http\Requests\StorePaiementRequest;
-use App\Http\Requests\UpdatePaiementRequest;
+use Illuminate\Http\Request;
 
 class PaiementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // 🔹 Afficher tous les paiements
+    public function afficherPaiement()
     {
-        //
+        $paiements = Paiement::with('etudiant')->get();
+        return response()->json($paiements);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // 🔹 Créer un nouveau paiement (fairePaiement)
+    public function fairePaiement(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'etudiant_id' => 'required|exists:etudiants,id',
+            'localisation' => 'required|string',
+            'nomBatiment' => 'required|string',
+            'typeBatiment' => 'required|in:Cantine,Chambre,Espace',
+            'typeLocal' => 'required|string',
+            'nomLocal' => 'required|string',
+            'typePaiement' => 'required|in:Mensualité,Caution',
+            'somme' => 'required|integer|min:0',
+            'modePaiement' => 'required|string',
+            'date_Paiement' => 'required|date',
+            'reference' => 'required|string|unique:paiements,reference',
+           
+        ]);
+
+        $paiement = Paiement::create($validated);
+        return response()->json($paiement, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePaiementRequest $request)
+    // 🔹 Modifier un paiement
+    public function modifierPaiement(Request $request, $id)
     {
-        //
+        $paiement = Paiement::findOrFail($id);
+
+        $validated = $request->validate([
+            'etudiant_id' => 'sometimes|exists:etudiants,id',
+            'localisation' => 'sometimes|string',
+            'nomBatiment' => 'sometimes|string',
+            'typeBatiment' => 'sometimes|in:Cantine,Pavillon,Autre',
+            'typeLocal' => 'sometimes|,string',
+            'nomLocal' => 'nullable|string',
+            'typePaiement' => 'sometimes|in:Mensualité,Caution',
+            'somme' => 'sometimes|integer|min:0',
+            'modePaiement' => 'sometimes|string',
+            'reference' => 'sometimes|string|unique:paiements,reference,' . $paiement->id,
+            
+        ]);
+
+        $paiement->update($validated);
+        return response()->json($paiement);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Paiement $paiement)
+    // 🔹 Supprimer un paiement
+    public function supprimerPaiement($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Paiement $paiement)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePaiementRequest $request, Paiement $paiement)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Paiement $paiement)
-    {
-        //
+        $paiement = Paiement::findOrFail($id);
+        $paiement->delete();
+        return response()->json(['message' => 'Paiement supprimé avec succès']);
     }
 }

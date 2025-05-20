@@ -2,65 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Affectation;
-use App\Http\Requests\StoreAffectationRequest;
-use App\Http\Requests\UpdateAffectationRequest;
+use App\Models\ReservationCantine;
+use App\Models\ReservationPavillon;
 
 class AffectationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste toutes les affectations
     public function index()
     {
-        //
+        return response()->json(Affectation::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Créer une nouvelle affectation
+    public function creerAffectation(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_reservationCantine' => 'nullable|exists:reservation_cantines,id',
+            'id_reservationPavillon' => 'nullable|exists:reservation_pavillons,id',
+            'date_affectation' => 'required|date',
+        ]);
+
+        if (!$validated['id_reservationCantine'] && !$validated['id_reservationPavillon']) {
+            return response()->json(['error' => 'Une réservation de cantine ou de pavillon est requise.'], 422);
+        }
+
+        $affectation = Affectation::create($validated);
+
+        return response()->json($affectation, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAffectationRequest $request)
+    // Afficher une affectation par son ID
+    public function afficherAffectation($id)
     {
-        //
+        $affectation = Affectation::find($id);
+        if (!$affectation) {
+            return response()->json(['error' => 'Affectation non trouvée'], 404);
+        }
+
+        return response()->json($affectation);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Affectation $affectation)
+    // Mettre à jour une affectation
+    public function modifierAffectation(Request $request, $id)
     {
-        //
+        $affectation = Affectation::find($id);
+        if (!$affectation) {
+            return response()->json(['error' => 'Affectation non trouvée'], 404);
+        }
+
+        $validated = $request->validate([
+            'id_reservationCantine' => 'nullable|exists:reservation_cantines,id',
+            'id_reservationPavillon' => 'nullable|exists:reservation_pavillons,id',
+            'date_affectation' => 'required|date',
+        ]);
+
+        $affectation->update($validated);
+
+        return response()->json($affectation);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Affectation $affectation)
+    // Supprimer une affectation
+    public function supprimerAffectation($id)
     {
-        //
-    }
+        $affectation = Affectation::find($id);
+        if (!$affectation) {
+            return response()->json(['error' => 'Affectation non trouvée'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAffectationRequest $request, Affectation $affectation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Affectation $affectation)
-    {
-        //
+        $affectation->delete();
+        return response()->json(['message' => 'Affectation supprimée avec succès']);
     }
 }

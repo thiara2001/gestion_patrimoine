@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
             $table->unsignedBigInteger('id_paiement'); // Ajout de la colonne
             $table->foreign('id_paiement')->references('id')->on('paiements')->onDelete('cascade');
+            $table->string('localisation');
+            $table->string('nomlocal');
             $table->date('date_debut');
             $table->date('date_fin');
             $table->double('montant_loyer');

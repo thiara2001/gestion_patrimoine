@@ -3,64 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReservationCantine;
-use App\Http\Requests\StoreReservationCantineRequest;
-use App\Http\Requests\UpdateReservationCantineRequest;
+use Illuminate\Http\Request;
 
 class ReservationCantineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Lister toutes les réservations
     public function index()
     {
-        //
+        return response()->json(ReservationCantine::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Créer une nouvelle réservation
+    public function faireReservation(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_utilisateur' => 'required|integer|exists:utilisateurs,id',
+            'id_site' => 'required|integer|exists:sites,id',
+            'description' => 'required|string',
+            'choixSite' => 'required|string',
+            'produitouService' => 'required|string',
+            'question' => 'required|boolean',
+            'document' => 'required|string',
+            'qualiteQHSE' => 'required|string',
+        ]);
+
+        $reservation = ReservationCantine::create($validated);
+
+        return response()->json([
+            'message' => 'Réservation à la cantine créée avec succès.',
+            'reservation' => $reservation
+        ], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreReservationCantineRequest $request)
+    // Afficher une réservation spécifique
+    public function AfficherReservation($id)
     {
-        //
+        $reservation = ReservationCantine::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
+        return response()->json($reservation, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ReservationCantine $reservationCantine)
+    // Mettre à jour une réservation
+    public function modifierReservation(Request $request, $id)
     {
-        //
+        $reservation = ReservationCantine::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
+
+        $reservation->update($request->all());
+
+        return response()->json([
+            'message' => 'Réservation mise à jour.',
+            'reservation' => $reservation
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ReservationCantine $reservationCantine)
+    // Supprimer une réservation
+    public function supprimerReservation($id)
     {
-        //
-    }
+        $reservation = ReservationCantine::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateReservationCantineRequest $request, ReservationCantine $reservationCantine)
-    {
-        //
-    }
+        $reservation->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ReservationCantine $reservationCantine)
-    {
-        //
+        return response()->json(['message' => 'Réservation supprimée.']);
     }
 }

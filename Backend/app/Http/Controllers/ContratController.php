@@ -3,64 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contrat;
-use App\Http\Requests\StoreContratRequest;
-use App\Http\Requests\UpdateContratRequest;
+use Illuminate\Http\Request;
 
 class ContratController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Lister tous les contrats
     public function index()
     {
-        //
+        return response()->json(Contrat::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Créer un contrat
+    public function creerContrat(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_utilisateur' => 'required|integer|exists:utilisateurs,id',
+            'id_paiement' => 'required|integer|exists:paiements,id',
+            'localisation' => 'required|string',
+            'nomlocal' => 'required|string',
+            'dateDebut' => 'required|date',
+            'dateFin' => 'required|date|after_or_equal:dateDebut',
+            'montant_loyer' => 'required|numeric',
+            'montant_caution' => 'required|numeric',
+            
+           
+            
+        ]);
+
+        $contrat = Contrat::create($validated);
+        return response()->json($contrat, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreContratRequest $request)
+    // Afficher un contrat spécifique
+    public function affichercontrat($id)
     {
-        //
+        $contrat = Contrat::find($id);
+
+        if (!$contrat) {
+            return response()->json(['message' => 'Contrat non trouvé'], 404);
+        }
+
+        return response()->json($contrat);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Contrat $contrat)
+    // Modifier un contrat
+    public function modifiercontrat(Request $request, $id)
     {
-        //
+        $contrat = Contrat::find($id);
+        if (!$contrat) {
+            return response()->json(['message' => 'Contrat non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'id_utilisateur' => 'sometimes|exists:utilisateurs,id',
+            'id_paiement' => 'sometimes|exists:paiements,id',
+            'typeEspace' => 'sometimes|required|in:cantine,pavillon',
+            'localisation' => 'sometimes|required|string',
+            'nomlocal' => 'sometimes|required|string',
+            'dateDebut' => 'sometimes|required|date',
+            'dateFin' => 'sometimes|required|date|after_or_equal:dateDebut',
+            'montant_loyer' => 'sometimes|required|numeric',
+            'montant_caution' => 'sometimes|required|numeric',
+           
+        ]);
+
+        $contrat->update($validated);
+        return response()->json($contrat);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Contrat $contrat)
+    // Supprimer un contrat
+    public function supprimerContrat($id)
     {
-        //
-    }
+        $contrat = Contrat::find($id);
+        if (!$contrat) {
+            return response()->json(['message' => 'Contrat non trouvé'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateContratRequest $request, Contrat $contrat)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Contrat $contrat)
-    {
-        //
+        $contrat->delete();
+        return response()->json(['message' => 'Contrat supprimé avec succès']);
     }
 }

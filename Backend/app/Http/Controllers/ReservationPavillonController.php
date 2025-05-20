@@ -3,64 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReservationPavillon;
-use App\Http\Requests\StoreReservationPavillonRequest;
-use App\Http\Requests\UpdateReservationPavillonRequest;
+use Illuminate\Http\Request;
 
 class ReservationPavillonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Lister toutes les réservations
     public function index()
     {
-        //
+        return response()->json(ReservationPavillon::all(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Créer une nouvelle réservation
+    public function faireReservation(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'id_utilisateur' => 'sometimes|exists:utilisateurs,id',
+            'id_site' => 'sometimes|exists:sites,id',
+            'niveauEtude' => 'required|string',
+            'nomPavillon' => 'required|string',
+            'nomChambre' => 'required|string',
+            'nombreCredit' => 'required|numeric',
+            'moyenneAnnuelle' => 'required|numeric',
+            'document' => 'required|string', // ou file si c'est un upload
+        ]);
+
+        $reservation = ReservationPavillon::create($validated);
+
+        return response()->json([
+            'message' => 'Réservation créée avec succès.',
+            'reservation' => $reservation
+        ], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreReservationPavillonRequest $request)
+    // Afficher une réservation spécifique
+    public function afficherReservation($id)
     {
-        //
+        $reservation = ReservationPavillon::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
+        return response()->json($reservation, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ReservationPavillon $reservationPavillon)
+    // Mettre à jour une réservation
+    public function ModifierReservation(Request $request, $id)
     {
-        //
+        $reservation = ReservationPavillon::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
+
+        $reservation->update($request->all());
+
+        return response()->json([
+            'message' => 'Réservation mise à j our.',
+            'reservation' => $reservation
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ReservationPavillon $reservationPavillon)
+    // Supprimer une réservation
+    public function supprimerReservation($id)
     {
-        //
-    }
+        $reservation = ReservationPavillon::find($id);
+        if (!$reservation) {
+            return response()->json(['message' => 'Réservation non trouvée.'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateReservationPavillonRequest $request, ReservationPavillon $reservationPavillon)
-    {
-        //
-    }
+        $reservation->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ReservationPavillon $reservationPavillon)
-    {
-        //
+        return response()->json(['message' => 'Réservation supprimée.']);
     }
 }
