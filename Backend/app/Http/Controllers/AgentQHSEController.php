@@ -7,19 +7,11 @@ use App\Models\Reclamation;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAgentQHSERequest;
 use App\Http\Requests\UpdateAgentQHSERequest;
-<<<<<<< HEAD
 use App\Models\Alerte;
 use App\Models\ControleQHSE;
 use Illuminate\Console\View\Components\Alert;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use League\Uri\Contracts\AuthorityInterface;
-=======
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ReclamationRepondue;
->>>>>>> b9181c07e25e8529735351c48a7d3a7d708ea445
-
-use function Laravel\Prompts\alert;
 
 class AgentQHSEController extends UtilisateurController
 {
@@ -118,39 +110,5 @@ class AgentQHSEController extends UtilisateurController
         ]);
     }
 
-<<<<<<< HEAD
-}
-=======
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAgentQHSERequest $request, AgentQHSE $agentQHSE)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AgentQHSE $agentQHSE)
-    {
-        //
-    }
-    public function repondre($id, Request $request)
-{
-    $request->validate([
-        'resultat' => 'required|in:favorable,defavorable'
-    ]);
-
-    $reclamation = Reclamation::findOrFail($id);
-    $reclamation->resultat = $request->resultat;
-    $reclamation->save();
-
-    // Envoyer la réponse à l’étudiant (par mail ou messagerie interne)
-    Mail::to($reclamation->utilisateur->email)->send(new ReclamationRepondue($reclamation));
-
-    return response()->json(['message' => 'Réponse envoyée.']);
-}
 
 }
->>>>>>> b9181c07e25e8529735351c48a7d3a7d708ea445
