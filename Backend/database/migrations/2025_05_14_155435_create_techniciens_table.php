@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('techniciens', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
-            $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->unsignedBigInteger('id'); // Ajout de la colonne
+            $table->foreign('id')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->primary('id');
             $table->unsignedBigInteger('id_domaine'); // Ajout de la colonne
             $table->foreign('id_domaine')->references('id')->on('domaines')->onDelete('cascade');
             $table->String('localisation');

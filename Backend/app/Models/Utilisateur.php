@@ -20,6 +20,9 @@ abstract class Utilisateur extends Authenticatable
      *
      * @var list<string>
      */
+
+    protected $table = 'utilisateurs';
+
     protected $fillable = [
         'nom',
         'prenom',
@@ -29,6 +32,7 @@ abstract class Utilisateur extends Authenticatable
         'age',
         'adresse',
         'telephone',
+        'type',
         'role',
     
     ];
@@ -58,25 +62,14 @@ abstract class Utilisateur extends Authenticatable
         ];
     }
 
-    public function technicien(){
-        return $this->hasMany(Technicien::class, 'id_utilisateur');
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
     }
 
-    public function gestionnaire(){
-        return $this->hasMany(Gestionnaire::class, 'id_utilisateur');
+    public function affectations()
+    {
+        return $this->hasMany(Affectation::class);
     }
 
-    public function etudiant(){
-        return $this->hasMany(Etudiant::class, 'id_utilisateur');
-    }
-
-    public function agentQHSE(){
-        return $this->hasMany(AgentQHSE::class, 'id_utilisateur');
-    }
-
-    public function commercant(){
-        return $this->hasMany(Commercant::class, 'id_utilisateur');
-    }
-
-    
 }

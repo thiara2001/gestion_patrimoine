@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
             $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->unsignedBigInteger('id_pavillon'); 
+            $table->foreign('id_pavillon')->references('id')->on('reservation_pavillon')->onDelete('cascade');
             $table->String('localisation');
             $table->String('observation');
-            $table->String('conclusion');
+            $table->enum('conclusion', ['negatif','positif']);
             $table->timestamps();
         });
     }

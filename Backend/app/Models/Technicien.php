@@ -9,7 +9,6 @@ class Technicien extends Utilisateur
     use HasFactory;
 
     protected $fillable = [
-        'id_utilisateur',
         'id_domaine',
         'localisation',
     ];
@@ -18,12 +17,19 @@ class Technicien extends Utilisateur
         return 'Technicien';
     }
 
-    public function utilisateur(){
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
-    }
 
     public function domaine(){
         return $this->belongsTo(Domaine::class, 'id_domaine');
+    }
+
+    public function interventions()
+    {
+        return $this->hasMany(Intervention::class, 'id_technicien');
+    }
+
+    public function alertes()
+    {
+        return $this->hasMany(Alerte::class, 'id_technicien');
     }
 }
 

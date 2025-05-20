@@ -15,14 +15,16 @@ return new class extends Migration
             $table->id();
              $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
             $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
-            $table->unsignedBigInteger('id_site'); // Ajout de la colonne
-            $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
+            $table->unsignedBigInteger('id_pavillon'); // Ajout de la colonne
+            $table->foreign('id_pavillon')->references('id')->on('pavillons')->onDelete('cascade');
             $table->String('niveauEtude');
             $table->String('nomPavillon');
             $table->String('nomChambre');
             $table->integer('nombreCredit');
             $table->double('moyenneAnnuel');
             $table->String('document');
+            $table->enum('statut', ['en_attente', 'approuvee']);
+            $table->enum('statutPaiement', ['non_payee', 'payee']);
             $table->timestamps();
         });
     }

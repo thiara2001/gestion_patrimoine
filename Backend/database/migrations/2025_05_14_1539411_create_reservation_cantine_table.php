@@ -23,6 +23,7 @@ return new class extends Migration
             $table->String('produitouservice');
             $table->String('document');
             $table->String('qualiteQHSE');
+            $table->enum('statutPaiement', ['en_attente', 'refuse', 'payer']);
             $table->timestamps();
         });
     }

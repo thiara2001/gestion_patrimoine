@@ -13,12 +13,17 @@ return new class extends Migration
     {
         Schema::create('interventions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
-            $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->unsignedBigInteger('id_technicien'); // Ajout de la colonne
+            $table->foreign('id_technicien')->references('id')->on('techniciens')->onDelete('cascade');
+            $table->unsignedBigInteger('id_equipement'); // Ajout de la colonne
+            $table->foreign('id_equipement')->references('id')->on('equipements_tables')->onDelete('cascade');
             $table->unsignedBigInteger('id_site'); // Ajout de la colonne
             $table->foreign('id_site')->references('id')->on('sites')->onDelete('cascade');
-            $table->String('description');
-            $table->String('natureProbleme');
+            $table->String('descriptionProbleme');
+            $table->String('actionEffectue');
+            $table->enum('statut', ['en_cours', 'resolue']);
+            $table->string('observations')->nullable();
+            $table->date('dateIntervention');
             $table->timestamps();
         });
     }

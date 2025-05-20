@@ -13,11 +13,19 @@ class ControleQHSE extends Model
 
      protected $fillable = [
         'id_utilisateur',
+        'localisation',
+        'observation',
+        'conclusion'
     ];
    
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisteur');
+    }
+
+     public function agentQHSE()
+    {
+        return $this->belongsTo(AgentQHSE::class, 'id_utilisateur');
     }
    
 }

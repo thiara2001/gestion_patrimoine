@@ -11,7 +11,6 @@ class Commercant extends Utilisateur
     use HasFactory;
     
     protected $fillable = [
-        'id_utilisateur',
         'numeroCi'
     ];
 
@@ -19,7 +18,20 @@ class Commercant extends Utilisateur
         return 'Commercant';
     }
 
-    public function utilisateur(){
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+ 
+
+    public function paiement()
+    {
+        return $this->hasMany(Paiement::class);
+    }
+
+    public function reclamation()
+    {
+        return $this->hasMany(Reclamation::class);
+    }
+
+     public function reservations()
+    {
+        return $this->hasMany(ReservationCantine::class, 'id_utilisateur');
     }
 }

@@ -9,8 +9,7 @@ class Gestionnaire extends Utilisateur
     use HasFactory;
 
     protected $fillable = [
-        'id_utilisateur',
-        'roleGestionnaire',
+        'roleGestionnaire'
     ];
 
     public function getUserType(){
