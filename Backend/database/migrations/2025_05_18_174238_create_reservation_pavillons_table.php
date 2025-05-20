@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservation_pavillon', function (Blueprint $table) {
+        Schema::create('reservation_pavillons', function (Blueprint $table) {
             $table->id();
              $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
             $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservation_pavillon');
+        Schema::dropIfExists('reservation_pavillons');
     }
 };

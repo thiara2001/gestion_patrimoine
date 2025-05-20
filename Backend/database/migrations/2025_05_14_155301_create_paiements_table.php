@@ -20,7 +20,7 @@ return new class extends Migration
             $table->String('typeBatiment');
             $table->enum('TypeLocal',['Cantine', 'Chambre']);
             $table->String('nomLocal');
-            $table->enum('typePaiement', ['Caution', 'Menstrualité']);
+            $table->enum('typePaiement', ['Caution', 'Mensualité']);
             $table->double('somme');
             $table->String('modePaiement');
             $table->date('date_Paiement');

@@ -21,8 +21,8 @@ class ReservationCantineController extends Controller
             'id_site' => 'required|integer|exists:sites,id',
             'description' => 'required|string',
             'choixSite' => 'required|string',
-            'produitouService' => 'required|string',
-            'question' => 'required|boolean',
+            'motifDemande' => 'required|string',
+            'produitouservice' => 'required|string',
             'document' => 'required|string',
             'qualiteQHSE' => 'required|string',
         ]);

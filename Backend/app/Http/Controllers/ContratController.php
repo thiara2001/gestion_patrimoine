@@ -21,8 +21,8 @@ class ContratController extends Controller
             'id_paiement' => 'required|integer|exists:paiements,id',
             'localisation' => 'required|string',
             'nomlocal' => 'required|string',
-            'dateDebut' => 'required|date',
-            'dateFin' => 'required|date|after_or_equal:dateDebut',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date|after_or_equal:dateDebut',
             'montant_loyer' => 'required|numeric',
             'montant_caution' => 'required|numeric',
             
@@ -57,11 +57,10 @@ class ContratController extends Controller
         $validated = $request->validate([
             'id_utilisateur' => 'sometimes|exists:utilisateurs,id',
             'id_paiement' => 'sometimes|exists:paiements,id',
-            'typeEspace' => 'sometimes|required|in:cantine,pavillon',
             'localisation' => 'sometimes|required|string',
             'nomlocal' => 'sometimes|required|string',
-            'dateDebut' => 'sometimes|required|date',
-            'dateFin' => 'sometimes|required|date|after_or_equal:dateDebut',
+            'date_debut' => 'sometimes|required|date',
+            'date_fin' => 'sometimes|required|date|after_or_equal:dateDebut',
             'montant_loyer' => 'sometimes|required|numeric',
             'montant_caution' => 'sometimes|required|numeric',
            

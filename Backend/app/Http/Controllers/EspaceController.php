@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Espace;
-use App\Http\Requests\StoreEspaceRequest;
-use App\Http\Requests\UpdateEspaceRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EspaceController extends Controller
 {
@@ -13,7 +13,8 @@ class EspaceController extends Controller
      */
     public function index()
     {
-        //
+        $espaces = Espace::all();
+        return response()->json($espaces);
     }
 
     /**
@@ -27,9 +28,21 @@ class EspaceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEspaceRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_site' => 'required|exists:sites,id',
+            'localisation' => 'required|string|max:255',
+            'superficie' => 'required|numeric|min:0',
+            ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $espace = Espace::create($request->all());
+
+        return response()->json($espace, 201);
     }
 
     /**
@@ -37,7 +50,7 @@ class EspaceController extends Controller
      */
     public function show(Espace $espace)
     {
-        //
+        return response()->json($espace);
     }
 
     /**
@@ -51,16 +64,30 @@ class EspaceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEspaceRequest $request, Espace $espace)
+    public function update(Request $request, Espace $espace)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_site' => 'exists:sites,id',
+            'localisation' => 'string|max:255',
+            'superficie' => 'numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $espace->update($request->all());
+
+        return response()->json($espace);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Espace $espace)
+    public function destroy($id)
     {
-        //
+         $id->delete();
+
+        return response()->json(null, 204);
     }
 }

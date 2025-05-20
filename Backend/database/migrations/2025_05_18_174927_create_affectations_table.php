@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('affectations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_reservationCantine'); // Ajout de la colonne
-            $table->foreign('id_reservationCantine')->references('id')->on('reservation_cantine')->onDelete('cascade');
+            $table->foreign('id_reservationCantine')->nullable()->references('id')->on('reservation_cantine')->onDelete('cascade');
             $table->unsignedBigInteger('id_reservationPavillon'); // Ajout de la colonne
-            $table->foreign('id_reservationPavillon')->references('id')->on('reservation_pavillon')->onDelete('cascade');
+            $table->foreign('id_reservationPavillon')->nullable()->references('id')->on('reservation_pavillons')->onDelete('cascade');
             $table->date('date_affectation');
             $table->timestamps();
         });

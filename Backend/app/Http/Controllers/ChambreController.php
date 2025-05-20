@@ -13,7 +13,8 @@ class ChambreController extends Controller
      */
     public function index()
     {
-        //
+        $chambres = Chambre::all();
+        return response()->json($chambres);
     }
 
     /**
@@ -29,15 +30,26 @@ class ChambreController extends Controller
      */
     public function store(StoreChambreRequest $request)
     {
-        //
+         $validated = $request->validate([
+            'id_pavillon' => 'required|exists:pavillons,id',
+            'numChambre' => 'required|string|unique:chambres,numChambre',
+            'nombreLits' => 'required|integer|min:1',
+            'toiletteInterieur' => 'required|boolean',
+            'nbreLampe' => 'required|integer|min:0',
+            'nombrePrise' => 'required|integer|min:0',
+        ]);
+
+        $chambre = Chambre::create($validated);
+        return response()->json($chambre, 201);
     }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show(Chambre $chambre)
+    public function show( $id)
     {
-        //
+         return response()->json($id);
     }
 
     /**
@@ -53,14 +65,26 @@ class ChambreController extends Controller
      */
     public function update(UpdateChambreRequest $request, Chambre $chambre)
     {
-        //
+         $validated = $request->validate([
+            'id_pavillon' => 'exists:pavillons,id',
+            'numChambre' => 'string|unique:chambres,numChambre,' . $chambre->id,
+            'nombreLits' => 'integer|min:1',
+            'toiletteInterieur' => 'boolean',
+            'nbreLampe' => 'integer|min:0',
+            'nombrePrise' => 'integer|min:0',
+        ]);
+
+        $chambre->update($validated);
+        return response()->json($chambre);
+    
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chambre $chambre)
+    public function destroy($id)
     {
-        //
+         $id->delete();
+        return response()->json(null, 204);
     }
 }

@@ -9,6 +9,9 @@ class ReservationPavillon extends Model
 {
     /** @use HasFactory<\Database\Factories\ReservationPavillonFactory> */
     use HasFactory;
+
+     protected $table = 'reservation_pavillons';
+     
      protected $fillable = [
         'id_utilisateur',
         'id_site',
@@ -25,7 +28,7 @@ class ReservationPavillon extends Model
     }
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisteur');
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
      public function site()
     {

@@ -5,46 +5,60 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Alerte;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AlerteEnvoyeeMail;
+//use App\Mail\AlerteEnvoyeeMail;
 
 class AlerteController extends Controller
 {
     // 🔍 Lister toutes les alertes
-    public function index()
-    {
-        return response()->json(Alerte::all());
-    }
-     // 📝 Créer une nouvelle alerte
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'id_utilisaeur' => 'required|integer|exists:utilisateurs,id', // à adapter si le nom exact de la table diffère
-             'nom' => 'required|string',
-              'description' => 'required|string',
-            'typeAlerte' => 'required|string',
-            'destinataire' => 'required|string',
-           
-        ]);
+   public function show($id)
+{
+    $alerte = Alerte::find($id);
 
-        $alerte = Alerte::create($validated);
-        return response()->json($alerte, 201);
+    if (!$alerte) {
+        return response()->json(['message' => 'Alerte non trouvée'], 404);
     }
+
+    return response()->json($alerte, 200);
+}
     // 📩 envoyer une alerte (création)
     public function envoyerAlerte(Request $request)
-    {
-       $details = [
-        'id_utilisaeur' => $request->id_utilisaeur,
-        'nom' => $request->nom,
-        'description' => $request->description,
-        'typeAlerte' => $request->typeAlerte,
-        'destinataire' => $request->destinataire,
-    ];
+{
+    // ✅ Validation des données
+    $validated = $request->validate([
+        'id_utilisateur' => 'required|integer|exists:utilisateurs,id',
+        'description' => 'required|string',
+        'typeAlerte' => 'required|string',
+        'destinataire' => 'required|string',
+        'email' => 'required|email'
+    ]);
 
-    Mail::to($request->email)->send(new AlerteEnvoyeeMail($details));
+    // 📝 Création de l'alerte dans la base de données
+    $alerte = Alerte::create([
+        'id_utilisateur' => $validated['id_utilisateur'],
+        'description' => $validated['description'],
+        'typeAlerte' => $validated['typeAlerte'],
+        'destinataire' => $validated['destinataire'],
+    ]);
 
-    return response()->json(['message' => 'Email envoyé avec succès']);
+    // ✉️ Construction du message
+    $contenu = "Nouvelle alerte du système :\n\n" .
+               "Utilisateur ID : {$validated['id_utilisateur']}\n" .
+               "Type : {$validated['typeAlerte']}\n" .
+               "Description : {$validated['description']}\n" .
+               "Destinataire : {$validated['destinataire']}";
+
+    // 📧 Envoi du mail sans vue Blade
+    Mail::raw($contenu, function ($message) use ($validated) {
+        $message->to($validated['email'])
+                ->subject('Alerte Système');
+    });
+
+    return response()->json([
+        'message' => 'Alerte enregistrée et email envoyé avec succès',
+        'alerte' => $alerte
+    ], 201);
 }
-    
+
 
     // 👁️ afficher toutes les alertes
     public function afficherAlerte()

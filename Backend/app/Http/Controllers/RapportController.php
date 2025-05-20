@@ -27,9 +27,9 @@ class RapportController extends Controller
     public function creerRapport(Request $request)
     {
         $validated = $request->validate([
-            'idUtilisateur' => 'required|integer|exists:utilisateurs,id',
+            'id_utilisateur' => 'required|integer|exists:utilisateurs,id',
             'typeRapport' => 'required|string',
-            'contenu' => 'required|string',
+            'contenue' => 'required|string',
             'dateGeneration' => 'required|date',
         ]);
 

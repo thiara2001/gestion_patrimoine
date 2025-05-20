@@ -11,7 +11,6 @@ class Alerte extends Model
     use HasFactory;
      protected $fillable = [
         'id_utilisaeur',
-        'nom',
         'description',
         'typeAlerte',
         'destinataire'

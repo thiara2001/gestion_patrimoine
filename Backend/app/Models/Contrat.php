@@ -13,8 +13,10 @@ class Contrat extends Model
     protected $fillable = [
         'id_utilisateur',
         'id_paiement',
+        'localisation',
+        'nomlocal',
         'date_debut',
-        'caution',
+        'date_fin',
         'montant_loyer',
         'montant_caution'
     ];

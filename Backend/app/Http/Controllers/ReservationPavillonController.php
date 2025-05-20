@@ -14,26 +14,34 @@ class ReservationPavillonController extends Controller
     }
 
     // Créer une nouvelle réservation
-    public function faireReservation(Request $request)
-    {
-        $validated = $request->validate([
-            'id_utilisateur' => 'sometimes|exists:utilisateurs,id',
-            'id_site' => 'sometimes|exists:sites,id',
-            'niveauEtude' => 'required|string',
-            'nomPavillon' => 'required|string',
-            'nomChambre' => 'required|string',
-            'nombreCredit' => 'required|numeric',
-            'moyenneAnnuelle' => 'required|numeric',
-            'document' => 'required|string', // ou file si c'est un upload
-        ]);
+   public function faireReservation(Request $request)
+{
+    $validated = $request->validate([
+        'id_utilisateur' => 'sometimes|exists:utilisateurs,id',
+        'id_site' => 'sometimes|exists:sites,id',
+        'niveauEtude' => 'required|string',
+        'nomPavillon' => 'required|string',
+        'nomChambre' => 'required|string',
+        'nombreCredit' => 'required|numeric',
+        'moyenneAnnuel' => 'required|numeric',
+        'document' => 'required|string', // ou file si c'est un upload
+    ]);
 
-        $reservation = ReservationPavillon::create($validated);
-
+    // Règle métier : refuser si moyenne < 12 et crédits < 60
+    if ($validated['moyenneAnnuel'] < 12 || $validated['nombreCredit'] < 60) {
         return response()->json([
-            'message' => 'Réservation créée avec succès.',
-            'reservation' => $reservation
-        ], 201);
+            'message' => "L'étudiant ne peut pas réserver une chambre car sa moyenne est inférieure à 12 ou ses nombres de crédits sont inférieurs à 60."
+        ], 403);
     }
+
+    $reservation = ReservationPavillon::create($validated);
+
+    return response()->json([
+        'message' => 'Réservation créée avec succès.',
+        'reservation' => $reservation
+    ], 201);
+}
+
 
     // Afficher une réservation spécifique
     public function afficherReservation($id)
@@ -56,7 +64,7 @@ class ReservationPavillonController extends Controller
         $reservation->update($request->all());
 
         return response()->json([
-            'message' => 'Réservation mise à j our.',
+            'message' => 'Réservation mise à jour.',
             'reservation' => $reservation
         ]);
     }
