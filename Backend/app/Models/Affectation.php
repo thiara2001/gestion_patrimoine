@@ -19,9 +19,14 @@ class Affectation extends Model
     {
         return $this->belongsTo(ReservationCantine::class, 'id_reservationCantine');
     }
-    public function reservationPavillon()
+   public function utilisateur()
+   {
+        return $this->belongsTo(Utilisateur::class);
+   }
+
+    public function gestionnaire()
     {
-        return $this->belongsTo(ReservationPavillon::class, 'id_reservationPavillon');
+        return $this->belongsTo(Utilisateur::class, 'gestionnaire_id');
     }
 
 

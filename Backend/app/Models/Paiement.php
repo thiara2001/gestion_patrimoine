@@ -20,7 +20,8 @@ class Paiement extends Model
         'somme',
         'modePaiement',
         'date_Paiement',
-        'reference'
+        'reference',
+        'statut'
     ];
     public function utilisateur()
     {

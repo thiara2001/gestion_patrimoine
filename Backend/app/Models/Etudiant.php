@@ -11,7 +11,6 @@ class Etudiant extends Model
     use HasFactory;
     
     protected $fillable = [
-        'id_utilisateur',
         'id_filiere',
         'numDossier',
         'niveauEtude',
@@ -21,10 +20,17 @@ class Etudiant extends Model
         return 'Etudiant';
     }
 
-    public function utilisateur(){
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
-    }
      public function filiere(){
         return $this->belongsTo(Utilisateur::class, 'id_filiere');
+    }
+
+       public function paiements()
+    {
+        return $this->hasMany(Paiement::class, 'id_utilisateur');
+    }
+    
+    public function reservations()
+    {
+        return $this->hasMany(ReservationPavillon::class, 'id_utilisateur');
     }
 }

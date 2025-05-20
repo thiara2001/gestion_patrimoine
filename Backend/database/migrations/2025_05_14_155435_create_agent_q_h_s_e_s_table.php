@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('agent_q_h_s_e_s', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
-            $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->unsignedBigInteger('id'); // Ajout de la colonne
+            $table->foreign('id')->references('id')->on('utilisateurs')->onDelete('cascade');
+             $table->primary('id');
             $table->timestamps();
         });
     }

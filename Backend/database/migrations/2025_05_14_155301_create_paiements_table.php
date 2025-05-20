@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_utilisateur'); // Ajout de la colonne
-            $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            $table->unsignedBigInteger('id_cantine'); // Ajout de la colonne
+            $table->foreign(columns: 'id_cantine')->references('id')->on('reservation_cantine')->onDelete('cascade');
             $table->String('localisation');
             $table->String('nomBatiment');
             $table->String('typeBatiment');
@@ -25,6 +25,7 @@ return new class extends Migration
             $table->String('modePaiement');
             $table->date('date_Paiement');
             $table->String('reference');
+            $table->enum('statut', ['en_attente', 'refuse', 'valider']);
             $table->timestamps();
         });
     }

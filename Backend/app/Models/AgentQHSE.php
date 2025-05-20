@@ -10,18 +10,21 @@ class AgentQHSE extends Utilisateur
     /** @use HasFactory<\Database\Factories\AgentQHSEFactory> */
     use HasFactory;
     protected $fillable = [
-        'id_utilisateur',
+        
     ];
 
     public function getUserType(){
         return 'AgentQHSE';
     }
 
-    public function utilisateur(){
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
-    }
 
     public function controleQHSE(){
-        return $this->belongsTo(ControleQHSE::class, 'id_utilisateur');
+        return $this->hasMany(ControleQHSE::class, 'id_utilisateur');
+    }
+
+    // Relation avec les alertes
+    public function alertes()
+    {
+        return $this->hasMany(Alerte::class);
     }
 }

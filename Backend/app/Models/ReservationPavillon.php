@@ -14,13 +14,15 @@ class ReservationPavillon extends Model
      
      protected $fillable = [
         'id_utilisateur',
-        'id_site',
+        'id_pavillon',
         'niveauEtude',
         'nomPavillon',
         'nomChambre',
         'nombreCredit',
         'moyenneAnnuel',
-        'document'
+        'document',
+        'statut',
+        'statutPaiement'
     ];
     public function affectation()
     {
@@ -30,9 +32,9 @@ class ReservationPavillon extends Model
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
-     public function site()
+     public function pavillon()
     {
-        return $this->belongsTo(Site::class, 'id_site');
+        return $this->belongsTo(Pavillon::class, 'id_pavillon');
     }
 
 }
